@@ -1,0 +1,15 @@
+node_modules
+.git
+.github
+dist
+dist-ssr
+*.local
+.env*
+!.env.example
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vscode
+.idea
+*.md
+coverage

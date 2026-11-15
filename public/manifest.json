@@ -1,0 +1,17 @@
+{
+  "name": "CareCircle Elderly Care",
+  "short_name": "CareCircle",
+  "description": "Shared healthcare ecosystem for elderly medication management and family coordination",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#059669",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+
