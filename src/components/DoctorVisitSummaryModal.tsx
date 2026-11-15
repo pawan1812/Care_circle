@@ -14,9 +14,10 @@ export const DoctorVisitSummaryModal: React.FC<DoctorVisitSummaryModalProps> = (
   isOpen,
   onClose,
 }) => {
-  const { profile, medications, careNotes } = useCare();
+  const { profile, medications, careNotes, doctors } = useCare();
   const [includeVitals, setIncludeVitals] = useState(true);
   const [includeQuestions, setIncludeQuestions] = useState(true);
+  const [selectedDoctor, setSelectedDoctor] = useState(() => profile.primaryDoctorName || 'Dr. Vikram Kulkarni');
 
   const [generatedDateStr] = useState(
     () => new Date().toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' })
@@ -44,9 +45,24 @@ export const DoctorVisitSummaryModal: React.FC<DoctorVisitSummaryModalProps> = (
               Doctor Visit Clinical Summary
             </h3>
             <p className="text-xs text-slate-500">
-              1-Page clinician-friendly report ready for consultation with {profile.primaryDoctorName}
+              1-Page clinician-friendly report ready for consultation with <strong>{selectedDoctor}</strong>
             </p>
-            <div className="flex items-center space-x-4 pt-2 text-xs text-slate-600">
+            <div className="flex flex-wrap items-center gap-3 pt-2 text-xs text-slate-600">
+              <div className="flex items-center space-x-1.5">
+                <span className="font-semibold text-slate-700">Target Specialist:</span>
+                <select
+                  value={selectedDoctor}
+                  onChange={(e) => setSelectedDoctor(e.target.value)}
+                  className="p-1 rounded-lg border border-slate-300 text-xs bg-slate-50 font-medium"
+                >
+                  <option value={profile.primaryDoctorName}>{profile.primaryDoctorName}</option>
+                  {doctors.map((d) => (
+                    <option key={d.id} value={d.name}>
+                      {d.name} ({d.specialty})
+                    </option>
+                  ))}
+                </select>
+              </div>
               <label className="flex items-center space-x-1.5 cursor-pointer">
                 <input
                   type="checkbox"
@@ -115,8 +131,8 @@ export const DoctorVisitSummaryModal: React.FC<DoctorVisitSummaryModalProps> = (
           {/* Clinician & Adherence Snapshot */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
             <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-              <span className="text-slate-400 font-bold uppercase tracking-wider block">Prescribing Doctor</span>
-              <p className="font-extrabold text-slate-900 mt-0.5">{profile.primaryDoctorName}</p>
+              <span className="text-slate-400 font-bold uppercase tracking-wider block">Consulting Specialist</span>
+              <p className="font-extrabold text-slate-900 mt-0.5">{selectedDoctor || profile.primaryDoctorName}</p>
               <p className="text-slate-500">{profile.hospitalPreference}</p>
             </div>
 

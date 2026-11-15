@@ -3,6 +3,7 @@ import {
   CareProfile,
   Member,
   Medication,
+  Doctor,
   DoseEvent,
   Appointment,
   CareNote,
@@ -18,6 +19,7 @@ import {
 import {
   initialProfile,
   initialMembers,
+  initialDoctors,
   initialMedications,
   initialDoses,
   initialAppointments,
@@ -69,6 +71,11 @@ export const CareProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [medications, setMedications] = useState<Medication[]>(() => {
     const saved = localStorage.getItem(`${STORAGE_PREFIX}medications`);
     return saved ? JSON.parse(saved) : initialMedications;
+  });
+
+  const [doctors, setDoctors] = useState<Doctor[]>(() => {
+    const saved = localStorage.getItem(`${STORAGE_PREFIX}doctors`);
+    return saved ? JSON.parse(saved) : initialDoctors;
   });
 
   const [doses, setDoses] = useState<DoseEvent[]>(() => {
@@ -156,6 +163,10 @@ export const CareProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     localStorage.setItem(`${STORAGE_PREFIX}medications`, JSON.stringify(medications));
   }, [medications]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_PREFIX}doctors`, JSON.stringify(doctors));
+  }, [doctors]);
 
   useEffect(() => {
     localStorage.setItem(`${STORAGE_PREFIX}doses`, JSON.stringify(doses));
@@ -507,6 +518,16 @@ export const CareProvider: React.FC<{ children: React.ReactNode }> = ({ children
     showToast(`Appointment with ${apt.doctor} scheduled successfully`, 'success');
   };
 
+  const addDoctor = (newDoc: Omit<Doctor, 'id'>) => {
+    const created: Doctor = {
+      ...newDoc,
+      id: `doc-${Date.now()}`,
+    };
+    setDoctors((prev) => [created, ...prev]);
+    appendAuditLog('ADD_DOCTOR', 'Doctor', `Added specialist ${created.name} (${created.specialty}) to Care Team`);
+    showToast(`Added ${created.name} to Care Team`, 'success');
+  };
+
   const volunteerForAppointment = (aptId: string) => {
     const apt = appointments.find((a) => a.id === aptId);
     if (!apt) return;
@@ -785,6 +806,7 @@ export const CareProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setMembers(initialMembers);
     setCurrentMemberId('mem-1');
     setMedications(initialMedications);
+    setDoctors(initialDoctors);
     setDoses(initialDoses);
     setAppointments(initialAppointments);
     setCareNotes(initialCareNotes);
@@ -809,6 +831,7 @@ export const CareProvider: React.FC<{ children: React.ReactNode }> = ({ children
         currentMember,
         members,
         medications,
+        doctors,
         doses,
         appointments,
         careNotes,
@@ -835,6 +858,7 @@ export const CareProvider: React.FC<{ children: React.ReactNode }> = ({ children
         updateMedication,
         discontinueMedication,
         addAppointment,
+        addDoctor,
         volunteerForAppointment,
         toggleChecklistItem,
         saveAppointmentOutcome,

@@ -1,4 +1,4 @@
-﻿# ==============================================================================
+# ==============================================================================
 # CareCircle — Google Cloud Run Automated Deployment Script (PowerShell)
 # Target Project: carecircle-4ec05 | Region: asia-south1 (Mumbai)
 # ==============================================================================
@@ -36,3 +36,4 @@ $SERVICE_URL = gcloud run services describe $SERVICE_NAME --project=$PROJECT_ID 
 Write-Host "Service URL: $SERVICE_URL" -ForegroundColor Green
 Write-Host "Health Check: $SERVICE_URL/healthz" -ForegroundColor Green
 Write-Host "==========================================================" -ForegroundColor Green
+

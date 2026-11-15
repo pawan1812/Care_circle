@@ -19,6 +19,7 @@ import {
   FirestoreAppointment,
   FirestoreCareNote,
   FirestoreCareTask,
+  FirestoreDoctor,
   FirestoreAuditLog,
   Role,
   DoseStatus,
@@ -396,6 +397,46 @@ export const appendAuditLogInDb = async (
   const id = `log_${Date.now()}`;
   const docRef = doc(db, 'profiles', profileId, 'auditLogs', id);
   await setDoc(docRef, { ...entry, id });
+};
+
+// ==============================================================================
+// 8. DOCTORS & SPECIALISTS (profiles/{profileId}/doctors/{docId})
+// ==============================================================================
+
+export const subscribeToDoctors = (
+  profileId: string,
+  onUpdate: (doctors: FirestoreDoctor[]) => void
+): Unsubscribe => {
+  const colRef = collection(db, 'profiles', profileId, 'doctors');
+  return onSnapshot(colRef, (snap) => {
+    const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as FirestoreDoctor));
+    onUpdate(docs);
+  });
+};
+
+export const getDoctorsFromDb = async (
+  profileId: string = DEFAULT_PROFILE_ID
+): Promise<FirestoreDoctor[]> => {
+  try {
+    const colRef = collection(db, 'profiles', profileId, 'doctors');
+    const snap = await getDocs(colRef);
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() } as FirestoreDoctor));
+  } catch (err) {
+    console.warn('[Firestore] Error fetching doctors:', err);
+    return [];
+  }
+};
+
+export const addDoctorToDb = async (
+  profileId: string,
+  doctor: FirestoreDoctor
+): Promise<void> => {
+  try {
+    const docRef = doc(db, 'profiles', profileId, 'doctors', doctor.id);
+    await setDoc(docRef, doctor);
+  } catch (err) {
+    console.warn('[Firestore] Error adding doctor:', err);
+  }
 };
 
 // ==============================================================================

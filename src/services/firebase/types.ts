@@ -139,6 +139,21 @@ export interface FirestoreCareTask {
   description?: string;
 }
 
+export interface FirestoreDoctor {
+  id: string;
+  name: string;
+  specialty: string;
+  hospital: string;
+  phone: string;
+  emergencyPhone?: string;
+  clinicAddress: string;
+  consultationHours: string;
+  email?: string;
+  notes?: string;
+  prescribedMedicationIds?: string[];
+  nextAppointmentDate?: string;
+}
+
 export interface FirestoreAuditLog {
   id: string;
   action: string;

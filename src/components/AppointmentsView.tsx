@@ -14,6 +14,7 @@ import {
 export const AppointmentsView: React.FC = () => {
   const {
     appointments,
+    doctors,
     addAppointment,
     volunteerForAppointment,
     toggleChecklistItem,
@@ -291,6 +292,34 @@ export const AppointmentsView: React.FC = () => {
             </div>
 
             <form onSubmit={handleSaveAppointment} className="space-y-4">
+              {doctors.length > 0 && (
+                <div>
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">
+                    Select from Registered Care Team:
+                  </label>
+                  <select
+                    onChange={(e) => {
+                      const selected = doctors.find((d) => d.id === e.target.value);
+                      if (selected) {
+                        setDoctor(selected.name);
+                        setSpecialty(selected.specialty);
+                        setLocation(selected.hospital);
+                        setPhone(selected.phone);
+                      }
+                    }}
+                    defaultValue=""
+                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-slate-50 focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="" disabled>-- Quick pick specialist (auto-fills below) --</option>
+                    {doctors.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.name} ({d.specialty} — {d.hospital})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
               <div>
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">
                   Doctor Name *

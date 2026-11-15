@@ -41,3 +41,4 @@ gcloud run services describe "$SERVICE_NAME" --project="$PROJECT_ID" --region="$
 echo "Health Check:"
 echo "$(gcloud run services describe "$SERVICE_NAME" --project="$PROJECT_ID" --region="$REGION" --format='value(status.url)')/healthz"
 echo "=========================================================="
+

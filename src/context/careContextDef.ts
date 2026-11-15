@@ -3,6 +3,7 @@ import {
   CareProfile,
   Member,
   Medication,
+  Doctor,
   DoseEvent,
   Appointment,
   CareNote,
@@ -31,6 +32,7 @@ export interface CareContextType {
   currentMember: Member;
   members: Member[];
   medications: Medication[];
+  doctors: Doctor[];
   doses: DoseEvent[];
   appointments: Appointment[];
   careNotes: CareNote[];
@@ -65,6 +67,7 @@ export interface CareContextType {
 
   // Appointment Actions
   addAppointment: (apt: Omit<Appointment, 'id' | 'status'>) => void;
+  addDoctor: (doc: Omit<Doctor, 'id'>) => void;
   volunteerForAppointment: (aptId: string) => void;
   toggleChecklistItem: (aptId: string, checklistId: string) => void;
   saveAppointmentOutcome: (aptId: string, notes: string) => void;
